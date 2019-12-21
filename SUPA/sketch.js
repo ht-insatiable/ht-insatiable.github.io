@@ -5,7 +5,7 @@ let planets=[];
 let p=[];
 
 function setup() {
-  createCanvas(1200, 600);
+  createCanvas(windowWidth,windowHeight);
   noStroke();
   s=0.01;
   for(let i=0;i<2400;i+=6){

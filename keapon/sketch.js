@@ -60,7 +60,7 @@ function draw(){
   }else{
     arr.angle=map(mouseY,0,windowHeight,-PI/2,0)
   }
-  if(random(1)<0.1) targets.push(new Target());
+  if(random(2)<0.1) targets.push(new Target());
   for(let i=targets.length-1;i>=0; i--){
     targets[i].move();
     targets[i].display();
@@ -156,7 +156,7 @@ class arrow{
 
 class Target{
   constructor(){
-    this.x=random(windowWidth/4,windowWidth);
+    this.x=random(200,windowWidth);
     this.y=-30;
     this.radius=25;
     this.yspeed=0;
@@ -201,7 +201,7 @@ function Tip(){
     targets.length=0;
     textSize(70);
     text("YOU DONT NEED\nTO ATTACT ANYONE\nIN THE INTERNET",windowWidth/2,windowHeight/3);
-  }else if(an>2&&(pn-an)<2){
+  }else if(an>4){
     targets.length=0;
     textSize(70);
     text("YOU ARE A\nKEY MURDER",windowWidth/2,windowHeight/3);
@@ -209,8 +209,8 @@ function Tip(){
     textAlign(LEFT);
     fill(255,150);
     textSize(24);
-    text("TIPS:",50,300);
+    text("TIPS:",50,250);
     textSize(18);
-    text("1.Move the mouse to adjust direction.\n\n2.Press the mouse to accelerate.\n\n3.Press the keyboard to supply.",50,350);
+    text("1. Move the mouse to adjust direction.\n\n2. Press the mouse to accelerate.\n\n3. Release the mouse to shoot.\n\n4. Press the keyboard to supply.",50,300);
   }
 }
