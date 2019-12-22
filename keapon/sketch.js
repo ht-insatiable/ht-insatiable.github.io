@@ -104,7 +104,7 @@ class arrow{
     this.y=500;
     this.xspeed=0;
     this.yspeed=0;
-    this.gra=0.1;
+    this.gra=0.16;
     this.angle=-PI/4;
     this.release=false;
     this.die=false;
@@ -200,7 +200,7 @@ function Tip(){
   if(an==0&&pn>=10){
     targets.length=0;
     textSize(70);
-    text("YOU DONT NEED\nTO ATTACT ANYONE\nIN THE INTERNET",windowWidth/2,windowHeight/3);
+    text("YOU DONT NEED\nTO ATTACK ANYONE\nIN THE INTERNET",windowWidth/2,windowHeight/3);
   }else if(an>4){
     targets.length=0;
     textSize(70);
