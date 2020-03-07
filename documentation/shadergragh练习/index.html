@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
+
+    <!--Description-->
+    
+        <meta name="description" content="Shadergraph Practise">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Tolo ZHANG">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="Shadergraph Practise"/>
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="Tolo"/>
+
+    <!--Page Cover-->
+    
+        <meta property="og:image" content=""/>
+    
+
+    <!-- Title -->
+    
+    <title>Shadergraph Practise - Tolo</title>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/reset.css">
+
+    
+<link rel="stylesheet" href="/css/main.css">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdn.rawgit.com/noelboss/featherlight/1.3.5/release/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
+
+
+    <!--Favicon-->
+    
+
+<meta name="generator" content="Hexo 4.1.1"></head>
+
+<body>
+
+<!-- Menu -->
+<!-- Navigation -->
+<header>
+    <div class="logo">
+        <a href="/">Tolo</a>
+    </div><!-- end logo -->
+
+    <div id="menu_icon"></div>
+    <nav>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/P5js">p5js</a>
+            </li>
+            
+            <li>
+                <a href="/unity">unity</a>
+            </li>
+            
+            <li>
+                <a href="/shadertoy">shadertoy</a>
+            </li>
+            
+            <li>
+                <a href="/blender">blender</a>
+            </li>
+            
+        </ul>
+    </nav><!-- end navigation menu -->
+
+    <div class="footer clearfix">
+        <ul class="social clearfix">
+            
+            
+                <li><a href="https://www.facebook.com/" class="fb" target="_blank" data-title="Facebook"></a></li>
+            
+            
+                <li><a href="https://www.behance.net/" class="behance" target="_blank" data-title="Behance"></a></li>
+            
+            
+                <li><a href="https://plus.google.com/+Pixelhint/posts" class="google" target="_blank" data-title="Google+"></a></li>
+            
+            
+                <li><a href="https://dribbble.com/pixelhint" class="dribble" target="_blank" data-title="Dribble"></a></li>
+            
+            
+            
+            
+        </ul><!-- end social -->
+    </div ><!-- end footer -->
+</header><!-- end header -->
+
+
+<!-- Main Content -->
+<section class="main clearfix">
+
+    <section class="top" style="background: url('/images/unity/sg-de.png');">
+        <div class="wrapper content_header clearfix">
+            
+
+<div class="work_nav">
+
+    <ul class="btn clearfix">
+        
+        <li><a href="/documentation/scanner/" class="previous" data-title="扫描仪-ShaderLab"></a></li>
+        
+        <li><a href="/" class="grid" data-title="Portfolio"></a></li>
+        
+        <li><a href="/documentation/%E5%8A%A8%E6%80%81%E8%BD%AE%E5%BB%93%E7%BA%BF/" class="next" data-title="动态轮廓线-ShaderLab"></a></li>
+        
+    </ul>
+
+</div><!-- end work_nav -->
+            <h1 class="title">Shadergraph Practise</h1>
+        </div>
+    </section><!-- end top -->
+
+    <section class="wrapper">
+        <div class="content">
+
+            <!-- Gallery -->
+            
+
+            <!-- Content -->
+            <p><strong>Shadergraph Practise</strong></p>
+<a id="more"></a>
+<p>在shadergraph中的一些练习，关于火焰，激光射线以及游动金鱼的效果生成</p>
+<h4 id="火焰"><a href="#火焰" class="headerlink" title="火焰:"></a>火焰:</h4><ol>
+<li>准备烟雾的贴图和渐变的贴图</li>
+<li>烟雾贴图采样将透明度作为渐变贴图的uv输入，将采样后的渐变纹理的单个通道作为输出的透明度输入</li>
+<li>输入顶点颜色，将a通道分离出来进行重映射，重映射范围设置为变量opacity，和烟雾采样输出的透明度相乘，限制范围0-1，重新作为渐变的uv输入</li>
+<li>复制相关节点进行颜色映射，将顶点颜色分离出的a通道重映射，输出范围设置为变量colorIntensity，和烟雾透明度相乘，限制范围0-1，作为uv输入渐变，将渐变的颜色输出结果和自定义颜色变量相乘</li>
+<li>将颜色相乘结果再和顶点颜色相乘，作为输出的颜色输入</li>
+</ol>
+<p><img src="/images/unity/sg1.png" alt=""></p>
+<iframe height=360 width=640 src="/videos/fire.mp4" frameborder=0 allowfullscreen></iframe>
+
+<h4 id="激光射线"><a href="#激光射线" class="headerlink" title="激光射线:"></a>激光射线:</h4><ol>
+<li>激光形状png作为主要纹理，定义MainSpeed变量与时间相乘后与uv相加使uv变化，作为采样的uv输入</li>
+<li>输入渐变纹理作为遮罩，与主要纹理相乘的结果和定义的Color变量相乘，再和顶点输入的颜色相乘后作为输出的颜色输入</li>
+<li>将遮罩的单个通道分离出来和主要纹理的a通道相乘，再和顶点颜色分离出来的a通道相乘作为输出的alpha输入</li>
+<li>新建Simple Noise纹理，定义NoiseSpeed变量和时间相乘加上顶点输入的uv作为噪声纹理的 uv输入，定义NoiseScale变量作为噪声纹理的Scale输入，对噪声输出进行pow操作，定义NoisePower作为它的幂次方</li>
+<li>定义NoiseAmount变量，新建lerp操作，分别将顶点uv和噪声pow后结果作为AB输入，输出代替第一步和主纹理的速度相加的顶点uv，实现NoiseAmount对噪声扰动uv的控制</li>
+<li>定义DissolveAmount变量，新建lerp操作，将主要纹理的a通道与噪声pow结果相乘作为Lerp的B输入，主纹理的RGBA通道作为A输入，lerp的输出代替第二步中和遮罩相乘的主要纹理，实现溶解对颜色波动的控制</li>
+<li>将上一步lerp的结果分理出a通道，代替第三步和遮罩的单个通道相乘的主纹理a通道，实现溶解对透明度的控制</li>
+</ol>
+<p><img src="/images/unity/sg2.png" alt=""></p>
+<iframe height=360 width=640 src="/videos/laser.mp4" frameborder=0 allowfullscreen></iframe>
+
+<h4 id="游动金鱼的顶点动画"><a href="#游动金鱼的顶点动画" class="headerlink" title="游动金鱼的顶点动画:"></a>游动金鱼的顶点动画:</h4><ol>
+<li>输入物体空间的顶点位置，将x分离出来，再和yz结合在一起作为lerp的B输入，物体空间的原生顶点位置作为A输入，定义WobbleAmount变量作为T输入，输出作为输出的顶点位置输入，实现波动程度的控制</li>
+<li>定义WobbleSpeed变量和时间相乘，定义WobbleFrequency变量和从世界空间下的顶点位置分离出来的y通道相乘，将二者相加进行sin操作，实现波动随时间和位置变化</li>
+<li>定义WobbleDistance变量和sin的结果相乘，结果和第一步分离出来的X通道相加，造成顶点位置的扰动</li>
+<li>对其他表面属性进行补充</li>
+</ol>
+<p><img src="/images/unity/sg3.png" alt=""></p>
+<iframe height=360 width=640 src="/videos/goldfish.mp4" frameborder=0 allowfullscreen></iframe>
+
+
+            <!-- Tags -->
+            
+
+
+<div class="tags">
+    
+</div>
+
+
+
+            <!-- Comments -->
+            <div>
+                
+
+
+
+
+            </div>
+        </div><!-- end content -->
+    </section>
+</section><!-- end main -->
+
+<!-- After footer scripts -->
+
+<!-- jQuery -->
+
+<script src="/js/jquery.js"></script>
+
+
+<!-- Custom Code -->
+
+<script src="/js/main.js"></script>
+
+
+<!-- Gallery -->
+<script src="//cdn.rawgit.com/noelboss/featherlight/1.3.5/release/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+</body>
+
+</html>

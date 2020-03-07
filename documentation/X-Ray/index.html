@@ -10,7 +10,7 @@
 
     <!--Description-->
     
-        <meta name="description" content="Mini Project #2 for SM6327">
+        <meta name="description" content="XRay-ShaderLab">
     
 
     <!--Author-->
@@ -20,7 +20,7 @@
 
     <!--Open Graph Title-->
     
-        <meta property="og:title" content="Remodeling"/>
+        <meta property="og:title" content="XRay-ShaderLab"/>
     
 
     <!--Open Graph Site Name-->
@@ -33,7 +33,7 @@
 
     <!-- Title -->
     
-    <title>Remodeling - Tolo</title>
+    <title>XRay-ShaderLab - Tolo</title>
 
     <!-- Custom CSS -->
     
@@ -124,7 +124,7 @@
 <!-- Main Content -->
 <section class="main clearfix">
 
-    <section class="top" style="background: url('/images/p5js/re-de.png');">
+    <section class="top" style="background: url('/images/unity/sl-de.png');">
         <div class="wrapper content_header clearfix">
             
 
@@ -132,16 +132,16 @@
 
     <ul class="btn clearfix">
         
-        <li><a href="/documentation/KEAPON/" class="previous" data-title="KEAPON"></a></li>
+        <li><a href="/documentation/%E5%8A%A8%E6%80%81%E8%BD%AE%E5%BB%93%E7%BA%BF/" class="previous" data-title="动态轮廓线-ShaderLab"></a></li>
         
         <li><a href="/" class="grid" data-title="Portfolio"></a></li>
         
-        <li><a href="/documentation/MAZE/" class="next" data-title="MAZE"></a></li>
+        <li><a href="/documentation/window/" class="next" data-title="雾化玻璃-ShaderLab"></a></li>
         
     </ul>
 
 </div><!-- end work_nav -->
-            <h1 class="title">Remodeling</h1>
+            <h1 class="title">XRay-ShaderLab</h1>
         </div>
     </section><!-- end top -->
 
@@ -152,17 +152,46 @@
             
 
             <!-- Content -->
-            <p><strong>Mini Project #2 for SM6327</strong></p>
+            <p><strong>XRay-ShaderLab</strong></p>
 <a id="more"></a>
-<p><strong>Title:</strong> Remodeling<br><strong>Artists:</strong> Tolo ZHANG, Wen</p>
-<h4 id="Statements"><a href="#Statements" class="headerlink" title="Statements:"></a>Statements:</h4><p>Our lives are digitalized, and our information is collected to form our electronic image. Social media under the big data algorithm has the power of changing us. By only releasing the information we want to see and the information they want us to see, we are finally shaped as they want us to be. At the same time of decentralization, we also put ourselves in a dediversified situation.</p>
-<p>For this mini project, we use numbers to abstract the people?s digitalized image, and we simulate the information push to make similar colors more similar, and finally we find color convergence. We hope that the audience can feel how we are influenced by digitalization through this work.</p>
-<h4 id="Screenshots"><a href="#Screenshots" class="headerlink" title="Screenshots:"></a>Screenshots:</h4><p><img src="/images/re1.png" alt=""><br><img src="/images/re2.png" alt=""></p>
-<h4 id="Work"><a href="#Work" class="headerlink" title="Work:"></a>Work:</h4><p>Click <a href="/remodel">HERE</a>.</p>
-<h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference:"></a>Reference:</h4><ol>
-<li><a href="https://thereader.mitpress.mit.edu/the-fantasy-of-opting-out/" target="_blank" rel="noopener">https://thereader.mitpress.mit.edu/the-fantasy-of-opting-out/ </a></li>
-<li><a href="https://wallhere.com/en/wallpaper/575720" target="_blank" rel="noopener">Image</a></li>
-</ol>
+
+<p>我们告诉它总是在东西上方绘制（使用z缓冲区），除非基本Pass已经绘制（使用模板缓冲区）。</p>
+<p>逻辑：</p>
+<ul>
+<li>基本Pass总会取代X光Pass</li>
+<li>如果基本Pass没有遮挡，x光就会在所有事物上绘制</li>
+<li>X光有正反面两个半透明通道</li>
+</ul>
+<p>X光Pass不与Z缓冲和模板缓冲冲突，我们可以使用ZWrite和ZTest标签在Unity中为着色器传递配置深度缓冲区设置。ZWrite允许我们配置片段是否应该写入深度缓冲区，而ZTest允许我们更改深度缓冲区测试的行为。</p>
+<p>由于我们希望X射线Pass可以在所有内容之上绘制，因此我们的设置将是：</p>
+<p><strong>ZWrite</strong> Off –这意味着该Pass将不会写入深度缓冲区</p>
+<p><strong>ZTest</strong> Always –这意味着Passs将始终通过；意思是，它将始终在其他Pass之上</p>
+<p>使用模板缓冲丢弃X光中已经被基本Pass绘制的内容</p>
+<h4 id="基本Pass"><a href="#基本Pass" class="headerlink" title="基本Pass:"></a>基本Pass:</h4><p>现在，我们需要告诉X射线通到从模板缓存读取，并且当它看到一个参考值大于3不画。</p>
+<pre><code>
+    Stencil {
+      Ref 3
+      Comp Greater
+      Fail keep
+      Pass replace
+    }
+</code></pre>
+<p>Comp Greater意味着当模板缓冲区中已有的值大于该片段的参考值（3）时，比较测试将“通过”。</p>
+<p>Fail Keep and Pass Replace意味着比较测试失败时将不绘制该片段，而在比较测试通过时绘制。“保持”和“替换”指的是处理模板缓冲区中已有的值。</p>
+<h4 id="第二个Pass"><a href="#第二个Pass" class="headerlink" title="第二个Pass:"></a>第二个Pass:</h4><p>为了使X射线效果更好地模仿“守望先锋”效果，我们需要同时绘制网格的正面和背面。要做到这一点，我们需要把它收回去两遍：第一遍，我们会剔除正面; 在第二个中，我们将抽出背面。</p>
+<p>为什么我们不能只使用一次X射线检查并关闭剔除？Welllll，因为我们将获得奇怪的伪像，这取决于人脸在z缓冲区中绘制的顺序</p>
+<p>第二个Pass不能使用完全相同的模板缓冲区设置，否则第二次X射线扫描将完全无法进行。这是因为我们不希望第二遍替换第一遍X射线像素。</p>
+<pre><code>
+    Stencil {
+      Ref 4
+      Comp NotEqual
+      Pass Keep
+    }
+</code></pre>
+<p>Ref 4表示我们的参考值为4；最重要的是，它等于基本通行证的参考值。</p>
+<p>Comp NotEqual示当模板缓冲区中的值等于我们的参考值时，此测试将通过。</p>
+<p>Pass Keep意味着我们将在测试通过时将任何值保留在模板缓冲区中。IE，当参考值为EQUAL时，我们将不会绘制像素。</p>
+<p><img src="/images/unity/sl2.png" alt=""></p>
 
 
             <!-- Tags -->

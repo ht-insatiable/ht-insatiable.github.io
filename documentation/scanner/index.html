@@ -10,7 +10,7 @@
 
     <!--Description-->
     
-        <meta name="description" content="Mini Project #2 for SM6327">
+        <meta name="description" content="扫描仪-ShaderLab">
     
 
     <!--Author-->
@@ -20,7 +20,7 @@
 
     <!--Open Graph Title-->
     
-        <meta property="og:title" content="Remodeling"/>
+        <meta property="og:title" content="扫描仪-ShaderLab"/>
     
 
     <!--Open Graph Site Name-->
@@ -33,7 +33,7 @@
 
     <!-- Title -->
     
-    <title>Remodeling - Tolo</title>
+    <title>扫描仪-ShaderLab - Tolo</title>
 
     <!-- Custom CSS -->
     
@@ -124,7 +124,7 @@
 <!-- Main Content -->
 <section class="main clearfix">
 
-    <section class="top" style="background: url('/images/p5js/re-de.png');">
+    <section class="top" style="background: url('/images/unity/scanner-de.png');">
         <div class="wrapper content_header clearfix">
             
 
@@ -132,16 +132,16 @@
 
     <ul class="btn clearfix">
         
-        <li><a href="/documentation/KEAPON/" class="previous" data-title="KEAPON"></a></li>
+        <li><a href="/documentation/car%20animation/" class="previous" data-title="Car Animation"></a></li>
         
         <li><a href="/" class="grid" data-title="Portfolio"></a></li>
         
-        <li><a href="/documentation/MAZE/" class="next" data-title="MAZE"></a></li>
+        <li><a href="/documentation/shadergragh%E7%BB%83%E4%B9%A0/" class="next" data-title="Shadergraph Pract..."></a></li>
         
     </ul>
 
 </div><!-- end work_nav -->
-            <h1 class="title">Remodeling</h1>
+            <h1 class="title">扫描仪-ShaderLab</h1>
         </div>
     </section><!-- end top -->
 
@@ -152,17 +152,69 @@
             
 
             <!-- Content -->
-            <p><strong>Mini Project #2 for SM6327</strong></p>
+            <p><strong>扫描仪-ShaderLab</strong></p>
 <a id="more"></a>
-<p><strong>Title:</strong> Remodeling<br><strong>Artists:</strong> Tolo ZHANG, Wen</p>
-<h4 id="Statements"><a href="#Statements" class="headerlink" title="Statements:"></a>Statements:</h4><p>Our lives are digitalized, and our information is collected to form our electronic image. Social media under the big data algorithm has the power of changing us. By only releasing the information we want to see and the information they want us to see, we are finally shaped as they want us to be. At the same time of decentralization, we also put ourselves in a dediversified situation.</p>
-<p>For this mini project, we use numbers to abstract the people?s digitalized image, and we simulate the information push to make similar colors more similar, and finally we find color convergence. We hope that the audience can feel how we are influenced by digitalization through this work.</p>
-<h4 id="Screenshots"><a href="#Screenshots" class="headerlink" title="Screenshots:"></a>Screenshots:</h4><p><img src="/images/re1.png" alt=""><br><img src="/images/re2.png" alt=""></p>
-<h4 id="Work"><a href="#Work" class="headerlink" title="Work:"></a>Work:</h4><p>Click <a href="/remodel">HERE</a>.</p>
-<h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference:"></a>Reference:</h4><ol>
-<li><a href="https://thereader.mitpress.mit.edu/the-fantasy-of-opting-out/" target="_blank" rel="noopener">https://thereader.mitpress.mit.edu/the-fantasy-of-opting-out/ </a></li>
-<li><a href="https://wallhere.com/en/wallpaper/575720" target="_blank" rel="noopener">Image</a></li>
-</ol>
+
+<h4 id="着色器"><a href="#着色器" class="headerlink" title="着色器:"></a>着色器:</h4><p>定义相关属性并从摄像机获取深度纹理，并在结构体中加入射线的变量</p>
+<pre><code>
+  sampler2D _MainTex;
+  sampler2D _DetailTex;
+  sampler2D_float _CameraDepthTexture;
+  float4 _WorldSpaceScannerPos;
+  float _ScanDistance;
+  float _ScanWidth;
+  float _LeadSharp;
+  float4 _LeadColor;
+  float4 _MidColor;
+  float4 _TrailColor;
+  float4 _HBarColor;
+</code></pre>
+
+<p>在片元着色器中对深度纹理解码并进行线性转换，根据射线和深度得到ray的方向由此定位到扫描的起始位置。<br>定义在距离该位置的一定范围内生成半透明的圆环扫描仪效果，同时需要注意扫描效果对天空和不起作用。</p>
+<pre><code>
+    float rawDepth = DecodeFloatRG(tex2D(_CameraDepthTexture, i.uv_depth));
+    float linearDepth = Linear01Depth(rawDepth);
+    float4 wsDir = linearDepth * i.interpolatedRay;
+    float3 wsPos = _WorldSpaceCameraPos + wsDir;
+    half4 scannerCol = half4(0, 0, 0, 0);
+
+    float dist = distance(wsPos, _WorldSpaceScannerPos);
+
+    if (dist < _ScanDistance && dist > _ScanDistance - _ScanWidth && linearDepth < 1)
+    {
+      float diff = 1 - (_ScanDistance - dist) / (_ScanWidth);
+      half4 edge = lerp(_MidColor, _LeadColor, pow(diff, _LeadSharp));
+      scannerCol = lerp(_TrailColor, edge, diff) + horizBars(i.uv) * _HBarColor;
+      scannerCol *= diff;
+    }
+</code></pre>
+
+
+<h4 id="摄像机脚本"><a href="#摄像机脚本" class="headerlink" title="摄像机脚本:"></a>摄像机脚本:</h4><p>从摄像机获取深度</p>
+<pre><code>
+void OnEnable()
+{
+   _camera = GetComponent<Camera>();
+   _camera.depthTextureMode = DepthTextureMode.Depth;
+}
+</code></pre>
+<p>利用RayCast的原理获取鼠标点击的位置作为扫描起始位置</p>
+<pre><code>
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                _scanning = true;
+                ScanDistance = 0;
+                ScannerOrigin.position = hit.point;
+            }
+        }
+</code></pre>
+<p>获取摄像机视场四个边角位置并根据远截面进行方向变量的统一变换，方便进行位置映射，将摄像机捕捉画面作为shader的主纹理<br>在update函数中使得扫描距离随时间增加，将扫描距离和扫描起始位置作为参数传到shader中。</p>
+<iframe height=480 width=720 src="/videos/scanner.mp4" frameborder=0 allowfullscreen></iframe>
 
 
             <!-- Tags -->

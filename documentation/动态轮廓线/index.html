@@ -10,6 +10,8 @@
 
     <!--Description-->
     
+        <meta name="description" content="动态轮廓线-ShaderLab">
+    
 
     <!--Author-->
     
@@ -17,6 +19,8 @@
     
 
     <!--Open Graph Title-->
+    
+        <meta property="og:title" content="动态轮廓线-ShaderLab"/>
     
 
     <!--Open Graph Site Name-->
@@ -29,7 +33,7 @@
 
     <!-- Title -->
     
-    <title>Archives: 2019/12 - Tolo</title>
+    <title>动态轮廓线-ShaderLab - Tolo</title>
 
     <!-- Custom CSS -->
     
@@ -118,85 +122,80 @@
 
 
 <!-- Main Content -->
-
-
 <section class="main clearfix">
-    <section class="wrapper">
-        <div class="content archives">
+
+    <section class="top" style="background: url('/images/unity/sl-de.png');">
+        <div class="wrapper content_header clearfix">
             
-            <ul class="archive-list">
+
+<div class="work_nav">
+
+    <ul class="btn clearfix">
+        
+        <li><a href="/documentation/shadergragh%E7%BB%83%E4%B9%A0/" class="previous" data-title="Shadergraph Practise"></a></li>
+        
+        <li><a href="/" class="grid" data-title="Portfolio"></a></li>
+        
+        <li><a href="/documentation/X-Ray/" class="next" data-title="XRay-ShaderLab"></a></li>
+        
+    </ul>
+
+</div><!-- end work_nav -->
+            <h1 class="title">动态轮廓线-ShaderLab</h1>
+        </div>
+    </section><!-- end top -->
+
+    <section class="wrapper">
+        <div class="content">
+
+            <!-- Gallery -->
+            
+
+            <!-- Content -->
+            <p><strong>动态轮廓线-ShaderLab</strong></p>
+<a id="more"></a>
+
+<h4 id="轮廓边"><a href="#轮廓边" class="headerlink" title="轮廓边:"></a>轮廓边:</h4><p>两个Pass：一个计算纹理和光照，另一个计算轮廓</p>
+<p>沿法线方向对轮廓边进行扩展</p>
+<p>使用模板缓冲区是此技巧的另一重要部分。第一个Pass（光照和纹理遍历）将写入模板缓冲区。（4是任意参考编号。）第二个Pass（轮廓边）读取模板缓冲区，并且在看到已经写入的相同参考后，将原始像素保留在原位。这样可以达到使缩放后的网格看起来像是在原始网格之后（或仅使轮廓）轮廓化的效果。我还要确保关闭剔除功能，这样我们就不会丢弃轮廓网格的任何顶点。</p>
+<h4 id="虚线轮廓边"><a href="#虚线轮廓边" class="headerlink" title="虚线轮廓边:"></a>虚线轮廓边:</h4><p>使用了距离场</p>
+<ol>
+<li>绘制轮廓时使用<strong>距离场</strong>跳过像素</li>
+<li>使用时间<strong>滚动</strong>每个像素的“位置”以进行动画处理</li>
+</ol>
+<ul>
+<li>我们测量每个像素距_SourcePos.xy的距离。</li>
+<li>然后，我们采用该距离的绝对值的正弦值，该值在负值和正值之间振荡。</li>
+<li>我们使用_OutlineDot和_OutlineDot2（我知道是惰性名称）来修改负值和正值的频率。</li>
+<li>然后，对clip（skip）的调用将丢弃skip值为负的任何像素。</li>
+<li>最后，我们为每个未被丢弃的像素返回基本的_OutlineColor平面。</li>
+<li>我们通过input.pos.xy获取当前位置（这是从顶点着色器传入的）</li>
+<li>我们将位置乘以_Time和_OutlineSpeed以便随时间转换位置。</li>
+</ul>
+<p><img src="/images/unity/sl1.png" alt=""></p>
+
+
+            <!-- Tags -->
+            
+
+
+<div class="tags">
+    
+</div>
+
+
+
+            <!-- Comments -->
+            <div>
                 
-                    <li>
-    <a href="/documentation/KEAPON/">KEAPON</a>
-</li>
-                
-                    <li>
-    <a href="/documentation/Remodeling/">Remodeling</a>
-</li>
-                
-                    <li>
-    <a href="/documentation/MAZE/">MAZE</a>
-</li>
-                
-                    <li>
-    <a href="/documentation/SUPA/">SUPA</a>
-</li>
-                
-                    <li>
-    <a href="/documentation/shadergragh练习/">Shadergraph Practise</a>
-</li>
-                
-                    <li>
-    <a href="/documentation/car animation/">Car Animation</a>
-</li>
-                
-                    <li>
-    <a href="/documentation/cloud/">Embracing the Cloud</a>
-</li>
-                
-                    <li>
-    <a href="/documentation/shadertoy/">Shadertoy Practise</a>
-</li>
-                
-                    <li>
-    <a href="/documentation/动态轮廓线/">动态轮廓线-ShaderLab</a>
-</li>
-                
-                    <li>
-    <a href="/documentation/X-Ray/">XRay-ShaderLab</a>
-</li>
-                
-                    <li>
-    <a href="/documentation/scanner/">扫描仪-ShaderLab</a>
-</li>
-                
-                    <li>
-    <a href="/documentation/window/">雾化玻璃-ShaderLab</a>
-</li>
-                
-                    <li>
-    <a href="/documentation/snow/">snow-模拟</a>
-</li>
-                
-                    <li>
-    <a href="/documentation/时间脉冲/">时间脉冲</a>
-</li>
-                
-                    <li>
-    <a href="/documentation/rain-模拟/">rain-模拟</a>
-</li>
-                
-                    <li>
-    <a href="/documentation/非相/">非相</a>
-</li>
-                
-            </ul>
+
+
+
+
+            </div>
         </div><!-- end content -->
     </section>
 </section><!-- end main -->
-
-
-
 
 <!-- After footer scripts -->
 

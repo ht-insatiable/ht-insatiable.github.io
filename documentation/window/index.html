@@ -10,7 +10,7 @@
 
     <!--Description-->
     
-        <meta name="description" content="Mini Project #2 for SM6327">
+        <meta name="description" content="雾化玻璃-ShaderLab">
     
 
     <!--Author-->
@@ -20,7 +20,7 @@
 
     <!--Open Graph Title-->
     
-        <meta property="og:title" content="Remodeling"/>
+        <meta property="og:title" content="雾化玻璃-ShaderLab"/>
     
 
     <!--Open Graph Site Name-->
@@ -33,7 +33,7 @@
 
     <!-- Title -->
     
-    <title>Remodeling - Tolo</title>
+    <title>雾化玻璃-ShaderLab - Tolo</title>
 
     <!-- Custom CSS -->
     
@@ -124,7 +124,7 @@
 <!-- Main Content -->
 <section class="main clearfix">
 
-    <section class="top" style="background: url('/images/p5js/re-de.png');">
+    <section class="top" style="background: url('/images/unity/sl-de.png');">
         <div class="wrapper content_header clearfix">
             
 
@@ -132,16 +132,16 @@
 
     <ul class="btn clearfix">
         
-        <li><a href="/documentation/KEAPON/" class="previous" data-title="KEAPON"></a></li>
+        <li><a href="/documentation/X-Ray/" class="previous" data-title="XRay-ShaderLab"></a></li>
         
         <li><a href="/" class="grid" data-title="Portfolio"></a></li>
         
-        <li><a href="/documentation/MAZE/" class="next" data-title="MAZE"></a></li>
+        <li><a href="/documentation/snow/" class="next" data-title="snow-模拟"></a></li>
         
     </ul>
 
 </div><!-- end work_nav -->
-            <h1 class="title">Remodeling</h1>
+            <h1 class="title">雾化玻璃-ShaderLab</h1>
         </div>
     </section><!-- end top -->
 
@@ -152,17 +152,46 @@
             
 
             <!-- Content -->
-            <p><strong>Mini Project #2 for SM6327</strong></p>
+            <p><strong>雾化玻璃-ShaderLab</strong></p>
 <a id="more"></a>
-<p><strong>Title:</strong> Remodeling<br><strong>Artists:</strong> Tolo ZHANG, Wen</p>
-<h4 id="Statements"><a href="#Statements" class="headerlink" title="Statements:"></a>Statements:</h4><p>Our lives are digitalized, and our information is collected to form our electronic image. Social media under the big data algorithm has the power of changing us. By only releasing the information we want to see and the information they want us to see, we are finally shaped as they want us to be. At the same time of decentralization, we also put ourselves in a dediversified situation.</p>
-<p>For this mini project, we use numbers to abstract the people?s digitalized image, and we simulate the information push to make similar colors more similar, and finally we find color convergence. We hope that the audience can feel how we are influenced by digitalization through this work.</p>
-<h4 id="Screenshots"><a href="#Screenshots" class="headerlink" title="Screenshots:"></a>Screenshots:</h4><p><img src="/images/re1.png" alt=""><br><img src="/images/re2.png" alt=""></p>
-<h4 id="Work"><a href="#Work" class="headerlink" title="Work:"></a>Work:</h4><p>Click <a href="/remodel">HERE</a>.</p>
-<h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference:"></a>Reference:</h4><ol>
-<li><a href="https://thereader.mitpress.mit.edu/the-fantasy-of-opting-out/" target="_blank" rel="noopener">https://thereader.mitpress.mit.edu/the-fantasy-of-opting-out/ </a></li>
-<li><a href="https://wallhere.com/en/wallpaper/575720" target="_blank" rel="noopener">Image</a></li>
+
+<ol>
+<li>高斯模糊效果</li>
+<li>书写和读取纹理</li>
+<li>根据纹理更改模糊</li>
 </ol>
+<h4 id="高斯模糊"><a href="#高斯模糊" class="headerlink" title="高斯模糊:"></a>高斯模糊:</h4><pre><code>
+float4 gaussianBlur(
+  float2 dir,
+  float4 grabPos,
+  float res,
+  sampler2D tex,
+  float radius
+)
+{
+// blur algorithm goes here...
+}
+</code></pre>
+<ul>
+<li><strong>float2 dir</strong>：两次应用模糊处理，这就是为什么我们需要“ dir”（方向）参数的原因-我们在x方向上应用一次，在y方向上应用一次。这是float2，因为我们使用（1，0）表示x方向，使用（0，1）表示y方向。</li>
+<li><strong>float4 grabPos</strong>：用于由所述像素模糊，这是我们上面计算的纹理坐标。</li>
+<li><strong>float res</strong>：我们在上面指定的轴（x或y）上的纹理分辨率。</li>
+<li><strong>sampler2D tex</strong>：要模糊的纹理。我们需要整个纹理，因为模糊算法会对原始像素附近的像素进行采样。</li>
+<li><strong>float radius</strong>：从原始像素开始模糊的距离。越高，模糊越强。<pre><code>
+float4 blurX = gaussianBlur(float2(1,0), input.grabPos, _BGTex_TexelSize.z, _BGTex, blurRadius);
+float4 blurY = gaussianBlur(float2(0,1), input.grabPos, _BGTex_TexelSize.w, _BGTex, blurRadius);
+return (blurX + blurY) * color;
+</code></pre>
+_TexelSize在.zw属性中包含纹理的xy大小。<h4 id="读写纹理"><a href="#读写纹理" class="headerlink" title="读写纹理:"></a>读写纹理:</h4></li>
+</ul>
+<p>我们需要将鼠标移动写入到纹理和阅读着色器纹理。创建C#脚本来写纹理。Material.Set [whatever]函数是如何从C＃代码设置着色器属性的方法！您只需要确保属性的字符串名称与着色器中的名称匹配即可。添加一个OnMouseDrag（）函数，以在播放器在我们的平面上单击并拖动时在鼠标位置周围绘制一个圆。确保您有一个附加到您的平面对象的MeshCollider，以便它将接收OnMouseDrag（）事件。</p>
+<h4 id="更改模糊"><a href="#更改模糊" class="headerlink" title="更改模糊:"></a>更改模糊:</h4><p>让我们回到着色器，并根据从纹理读取的值应用模糊量。由于我们在单击鼠标的位置绘制红色，并且默认情况下纹理为黑色，因此我们可以基于红色通道更改模糊和颜色色调量。</p>
+<pre><code>
+    float blurRadius = _BlurRadius * percentMaxAge;
+    float4 color = (1-percentMaxAge)*_ClearColor + percentMaxAge*_FogColor;
+</code></pre>
+<p>用当前时间减去出生时间，进行年龄映射</p>
+<iframe height=360 width=640 src="/videos/window.mp4" frameborder=0 allowfullscreen></iframe>
 
 
             <!-- Tags -->
